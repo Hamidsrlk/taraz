@@ -2,7 +2,7 @@
   'use strict';
 
   var state = {
-    lang: 'en',
+    lang: 'fa',
     booted: false,
     reducedMotion: window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   };
@@ -21,16 +21,19 @@
       'nav.process': 'Process',
       'nav.work': 'Work',
       'nav.contact': 'Contact',
+      'nav.chat': 'Chat',
       'nav.cta': 'Request an Assessment',
 
       'hero.title': '<span class="gradient-text">Smarter Systems</span><br>Clearer Decisions.',
       'hero.subtitle': 'We embed within your organization to diagnose operations, build custom AI products, and accelerate every critical workflow. Enterprise intelligence, deployed where it matters.',
       'hero.cta.primary': 'Request On-Site Assessment',
       'hero.cta.secondary': 'Explore Services',
+      'hero.chip1': 'Deployed in Production',
+      'hero.chip2': 'Live Monitoring',
 
-      'trust.1': '<em>50%</em> Average Operational Cost Reduction',
-      'trust.2': '<em>10x</em> Workflow Acceleration',
-      'trust.3': '<em>100%</em> Custom Enterprise Design',
+      'trust.1': '<em data-count="50" data-suffix="%">50%</em> Average Operational Cost Reduction',
+      'trust.2': '<em data-count="10" data-suffix="x">10x</em> Workflow Acceleration',
+      'trust.3': '<em data-count="100" data-suffix="%">100%</em> Custom Enterprise Design',
 
       'services.eyebrow': 'Expertise',
       'services.title': 'Specialized AI Services for Enterprise Operations',
@@ -135,6 +138,13 @@
       'banner.metric3': 'Custom Build',
       'banner.cta': 'Start the Conversation',
 
+      'chat.page.eyebrow': 'Live Chat',
+      'chat.page.title': 'Talk to us — instantly.',
+      'chat.page.subtitle': 'Send a message and get an immediate response. For a detailed assessment, the contact form stays available.',
+      'chat.agent': 'Taraz Support',
+      'chat.online': 'Online — instant replies',
+      'chat.placeholder': 'Type your message…',
+
       'contact.title': 'Let\u2019s Talk About Your Enterprise',
       'contact.subtitle': 'Tell us about your operations. We\u2019ll show you what\u2019s possible. Fill out the form and we\u2019ll schedule a discovery call within two business days.',
       'contact.form.name': 'Full Name',
@@ -155,16 +165,19 @@
       'nav.process': '\u0641\u0631\u0622\u06cc\u0646\u062f',
       'nav.work': '\u067e\u0631\u0648\u0698\u0647\u200c\u0647\u0627',
       'nav.contact': '\u062a\u0645\u0627\u0633',
+      'nav.chat': '\u06af\u0641\u062a\u200c\u06af\u0648',
       'nav.cta': '\u062f\u0631\u062e\u0648\u0627\u0633\u062a \u0627\u0631\u0632\u06cc\u0627\u0628\u06cc',
 
       'hero.title': '<span class="gradient-text">\u0633\u06cc\u0633\u062a\u0645\u200c\u0647\u0627\u06cc \u0647\u0648\u0634\u0645\u0646\u062f\u062a\u0631</span><br>\u062a\u0635\u0645\u06cc\u0645\u200c\u0647\u0627\u06cc \u0634\u0641\u0627\u0641\u200c\u062a\u0631.',
       'hero.subtitle': '\u0645\u0627 \u062f\u0631 \u0633\u0627\u0632\u0645\u0627\u0646 \u0634\u0645\u0627 \u0645\u0633\u062a\u0642\u0631 \u0645\u06cc\u200c\u0634\u0648\u06cc\u0645\u060c \u0639\u0645\u0644\u06cc\u0627\u062a \u0631\u0627 \u0628\u0631\u0631\u0633\u06cc \u0645\u06cc\u200c\u06a9\u0646\u06cc\u0645\u060c \u0645\u062d\u0635\u0648\u0644\u0627\u062a \u0627\u062e\u062a\u0635\u0627\u0635\u06cc \u0647\u0648\u0634 \u0645\u0635\u0646\u0648\u0639\u06cc \u0645\u06cc\u200c\u0633\u0627\u0632\u06cc\u0645 \u0648 \u0647\u0631 \u06a9\u0631\u0627\u0646\u200c\u0648\u0648\u0631\u06a9 \u062d\u06cc\u0627\u062a\u06cc \u0631\u0627 \u0633\u0631\u0639\u062a \u0645\u06cc\u200c\u0628\u062e\u0634\u06cc\u0645. \u0647\u0648\u0634 \u0633\u0627\u0632\u0645\u0627\u0646\u06cc\u060c \u062f\u0631 \u062c\u0627\u06cc\u06cc \u06a9\u0647 \u0645\u0647\u0645 \u0627\u0633\u062a.',
       'hero.cta.primary': '\u062f\u0631\u062e\u0648\u0627\u0633\u062a \u0627\u0631\u0632\u06cc\u0627\u0628\u06cc \u062d\u0636\u0648\u0631\u06cc',
       'hero.cta.secondary': '\u0645\u0634\u0627\u0647\u062f\u0647 \u062e\u062f\u0645\u0627\u062a',
+      'hero.chip1': '\u0645\u0633\u062a\u0642\u0631 \u062f\u0631 \u062a\u0648\u0644\u06cc\u062f',
+      'hero.chip2': '\u067e\u0627\u06cc\u0634 \u0632\u0646\u062f\u0647',
 
-      'trust.1': '<em>\u06f5\u06f0\u066a</em> \u06a9\u0627\u0647\u0634 \u0645\u06cc\u0627\u0646\u06af\u06cc\u0646 \u0647\u0632\u06cc\u0646\u0647\u200c\u0647\u0627\u06cc \u0639\u0645\u0644\u06cc\u0627\u062a\u06cc',
-      'trust.2': '<em>\u06f1\u06f0\u00d7</em> \u0627\u0641\u0632\u0627\u06cc\u0634 \u0633\u0631\u0639\u062a \u06a9\u0631\u0627\u0646\u200c\u0648\u0648\u0631\u06a9',
-      'trust.3': '<em>\u06f1\u06f0\u06f0\u066a</em> \u0637\u0631\u0627\u062d\u06cc \u0627\u062e\u062a\u0635\u0627\u0635\u06cc \u0633\u0627\u0632\u0645\u0627\u0646\u06cc',
+      'trust.1': '<em data-count="50" data-suffix="%">\u06f5\u06f0\u066a</em> \u06a9\u0627\u0647\u0634 \u0645\u06cc\u0627\u0646\u06af\u06cc\u0646 \u0647\u0632\u06cc\u0646\u0647\u200c\u0647\u0627\u06cc \u0639\u0645\u0644\u06cc\u0627\u062a\u06cc',
+      'trust.2': '<em data-count="10" data-suffix="x">\u06f1\u06f0\u00d7</em> \u0627\u0641\u0632\u0627\u06cc\u0634 \u0633\u0631\u0639\u062a \u06a9\u0631\u0627\u0646\u200c\u0648\u0648\u0631\u06a9',
+      'trust.3': '<em data-count="100" data-suffix="%">\u06f1\u06f0\u06f0\u066a</em> \u0637\u0631\u0627\u062d\u06cc \u0627\u062e\u062a\u0635\u0627\u0635\u06cc \u0633\u0627\u0632\u0645\u0627\u0646\u06cc',
 
       'services.eyebrow': '\u062a\u062e\u0635\u0635\u200c\u0647\u0627',
       'services.title': '\u062e\u062f\u0645\u0627\u062a \u0627\u062e\u062a\u0635\u0627\u0635\u06cc \u0647\u0648\u0634 \u0645\u0635\u0646\u0648\u0639\u06cc \u0628\u0631\u0627\u06cc \u0639\u0645\u0644\u06cc\u0627\u062a \u0633\u0627\u0632\u0645\u0627\u0646\u06cc',
@@ -269,6 +282,13 @@
       'banner.metric3': '\u0633\u0627\u062e\u062a \u0633\u0641\u0627\u0631\u0634\u06cc',
       'banner.cta': '\u0634\u0631\u0648\u0639 \u06af\u0641\u062a\u06af\u0648',
 
+      'chat.page.eyebrow': '\u06af\u0641\u062a\u200c\u06af\u0648\u06cc \u0632\u0646\u062f\u0647',
+      'chat.page.title': '\u062f\u0631 \u0647\u0645\u06cc\u0646 \u0644\u062d\u0638\u0647 \u0628\u0627 \u0645\u0627 \u062f\u0631 \u0627\u0631\u062a\u0628\u0627\u0637 \u0628\u0627\u0634\u06cc\u062f.',
+      'chat.page.subtitle': '\u067e\u06cc\u0627\u0645 \u0628\u062f\u0647\u06cc\u062f \u0648 \u067e\u0627\u0633\u062e \u0641\u0648\u0631\u06cc \u0628\u06af\u06cc\u0631\u06cc\u062f. \u0628\u0631\u0627\u06cc \u0627\u0631\u0632\u06cc\u0627\u0628\u06cc \u062c\u0627\u0645\u0639\u200c\u062a\u0631\u060c \u0641\u0631\u0645 \u062a\u0645\u0627\u0633 \u0647\u0645\u0686\u0646\u0627\u0646 \u062f\u0631 \u062f\u0633\u062a\u0631\u0633 \u0627\u0633\u062a.',
+      'chat.agent': '\u067e\u0634\u062a\u06cc\u0628\u0627\u0646\u06cc \u062a\u0627\u0631\u0627\u0632',
+      'chat.online': '\u0622\u0646\u0644\u0627\u06cc\u0646 \u2014 \u067e\u0627\u0633\u062e \u0641\u0648\u0631\u06cc',
+      'chat.placeholder': '\u067e\u06cc\u0627\u0645 \u062e\u0648\u062f \u0631\u0627 \u0628\u0646\u0648\u06cc\u0633\u06cc\u062f\u2026',
+
       'contact.title': '\u062f\u0631\u0628\u0627\u0631\u0647 \u0633\u0627\u0632\u0645\u0627\u0646 \u0634\u0645\u0627 \u0628\u062d\u062b \u06a9\u0646\u06cc\u0645',
       'contact.subtitle': '\u062f\u0631\u0628\u0627\u0631\u0647 \u0639\u0645\u0644\u06cc\u0627\u062a \u062e\u0648\u062f \u0628\u06af\u0648\u06cc\u06cc\u062f. \u0645\u0627 \u0627\u0645\u06a9\u0627\u0646\u0627\u062a \u0631\u0627 \u0646\u0634\u0627\u0646 \u062e\u0648\u0627\u0647\u06cc\u0645 \u062f\u0627\u062f. \u0641\u0631\u0645 \u0631\u0627 \u067e\u0631 \u06a9\u0646\u06cc\u062f \u0648 \u0637\u06cc \u062f\u0648 \u0631\u0648\u0632 \u06a9\u0627\u0631\u06cc \u0628\u0627 \u0634\u0645\u0627 \u062a\u0645\u0627\u0633 \u062e\u0648\u0627\u0647\u06cc\u0645 \u06af\u0631\u0641\u062a.',
       'contact.form.name': '\u0646\u0627\u0645 \u0648 \u0646\u0627\u0645 \u062e\u0627\u0646\u0648\u0627\u062f\u06af\u06cc',
@@ -298,7 +318,7 @@
         }
       }
     });
-    if (I18N[lang]['hero.title']) {
+    if ($('[data-i18n="hero.title"]')) {
       document.title = lang === 'fa'
         ? '\u062a\u062d\u0648\u0644 \u062f\u06cc\u062c\u06cc\u062a\u0627\u0644 \u0628\u0627 \u0647\u0648\u0634 \u0645\u0635\u0646\u0648\u0639\u06cc'
         : 'Enterprise AI Transformation';
@@ -317,7 +337,7 @@
   function initTheme() {
     var theme = localStorage.getItem('theme');
     if (!theme) {
-      theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      theme = 'light';
     }
     var html = document.documentElement;
     function apply(t) {
@@ -551,7 +571,7 @@
 
   function boot() {
     initTheme();
-    applyLang('en');
+    applyLang(document.documentElement.lang === 'en' ? 'en' : 'fa');
     initHeaderScroll();
     initMobileDrawer();
     initActiveNav();
