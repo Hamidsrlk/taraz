@@ -1,0 +1,7 @@
+# never commit secrets or local artifacts
+.env
+.env.*
+*.local
+node_modules/
+.DS_Store
+*.log

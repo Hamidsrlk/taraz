@@ -1,5 +1,56 @@
 # Taraz — Development Changelog
 
+## v18 — Secure Chat: Serverless Proxy, No Secrets in the Client
+
+**Folder:** `taraz-site-v18-chat-secure-openrouter` (git repo carried over from v17)
+
+### Security — GH013 Push Protection remediation
+- **Problem:** the OpenRouter key was committed in `assets/js/chat.js:7` (commit `02b61fe`); GitHub blocked the push with GH013
+- **Fix:** the key is **removed from the client**; the chat now talks to an internal endpoint that holds the key in environment variables only
+- Commit `02b61fe` was rewritten with `git commit --amend` (the commit had never reached GitHub — `origin/main` was one commit behind)
+- **IMPORTANT:** the leaked key (the `sk-or-v1-` key that was in `chat.js:7`) must be **revoked** at https://openrouter.ai/keys and replaced with a new one, stored only as `OPENROUTER_API_KEY` in the deploy environment
+
+### Architecture (new)
+- `assets/js/chat.js` — no key, no OpenRouter URL, no system prompt; sends `{ messages, locale }` to `POST /api/chat`, expects `{ replyText }`; falls back to canned keyword replies on any failure (offline / 503 / no key)
+- `api/chat.js` — **Vercel serverless function**: reads `OPENROUTER_API_KEY` from env, proxies to OpenRouter (`/api/v1/chat/completions`) with `HTTP-Referer: https://taraz.studio` + `X-Title`, model fallback chain, 20s timeout per attempt, sanitized input (max 30 messages, 2000 chars each), **no stack traces or secrets in responses**
+- `worker.js` — **Cloudflare Workers alternative** (Service Worker format; secret read from the `OPENROUTER_API_KEY` binding; deploy with `wrangler`)
+- System prompts moved server-side, **bilingual** (`fa`/`en` selected by client `locale`): Taraz facts list (the only allowed company info), lead-qualification flow, flawless Persian rules (standard orthography, Persian digits, no foreign words)
+
+### Model chain (server-side)
+1. `deepseek/deepseek-v4-flash-0731` — near-free, best Persian (needs a few cents of credit on the account)
+2. `google/gemma-4-31b-it:free` — free fallback
+3. `nvidia/nemotron-3-super-120b-a12b:free` — last free fallback
+- If every model fails (429/402/5xx/timeout) → `503 { error: 'ai_unavailable' }` → client renders canned replies
+
+### UX preserved (unchanged from v17)
+- Typing indicator, conversation history in `localStorage`, clear + mailto transcript, quick chips re-render on language switch, RTL/FA + LTR/EN, `prefers-reduced-motion`
+
+### Docs
+- New `docs/chat-integration.md` — architecture, GH013 fix steps, key rotation, Vercel + Cloudflare deployment, curl test
+
+---
+
+## v17.1 — AI-Powered Chat (OpenRouter)
+
+**Folder:** `taraz-site-v17-chat`
+
+### Added — real AI replies in the chat
+- `chat.js` now calls **OpenRouter** (`https://openrouter.ai/api/v1/chat/completions`) instead of canned keyword replies
+- **Model fallback chain** (free tier rate limits are common, so we try in order):
+  1. `google/gemma-4-31b-it:free` — best Persian quality
+  2. `nvidia/nemotron-3-super-120b-a12b:free` — backup if Gemma is rate-limited (429) or times out
+  3. If all models fail → falls back to the old rule-based canned replies, so the chat never breaks
+- **45s timeout per model** via `AbortController`, then auto-advances to the next model
+- **System prompt** (top of `chat.js`, `SYSTEM_PROMPT`): Taraz's lead-qualification flow — listen → diagnose the visitor's process → propose a tailored AI/automation solution → collect name/company/contact at the end for specialist follow-up; reply in the visitor's language, short answers (2–5 sentences), never invent prices, 30-min discovery call for estimates, email `hello@taraz.studio`
+- **Context**: last 20 messages of the conversation (from `localStorage`) are sent to the model, so it remembers earlier topics; greeting message updated to "AI virtual assistant"
+- API key is stored client-side in `chat.js` (`OPENROUTER_KEY` — demo-grade security; key gets exposed in DevTools)
+
+### Technical
+- `node --check` passes
+- NOTE: DeepSeek free models no longer exist on OpenRouter, and the account's privacy settings (ZDR) also blocked paid DeepSeek — switched to the free Gemma/Nemotron chain (verified live via API)
+
+---
+
 ## v17 — Live Chat (Page + Floating Button)
 
 **Folder:** `taraz-site-v17-chat`

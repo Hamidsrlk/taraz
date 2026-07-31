@@ -3,10 +3,11 @@
 
   var EMAIL = 'hello@taraz.studio';
   var STORAGE_KEY = 'taraz-chat-v1';
+  var API_ENDPOINT = '/api/chat';
 
   var I18N = {
     en: {
-      greeting: 'Hi! I am the Taraz virtual assistant. Ask me about our services, pricing, or a demo — or just say hello. A specialist can also take over if you need a human.',
+      greeting: 'Hi! I am the AI virtual assistant of Taraz. Tell me what problem you want to solve, ask about our services, pricing, or a demo — or just say hello. A specialist can also take over if you need a human.',
       chips: ['Pricing', 'Services', 'Book a demo', 'Talk to a person'],
       replies: {
         greet: 'Hello! Thanks for reaching out. How can we help? You can ask about pricing, services, or book a quick demo.',
@@ -21,7 +22,7 @@
       },
     },
     fa: {
-      greeting: '\u0633\u0644\u0627\u0645! \u0645\u0646 \u062f\u0633\u062a\u06cc\u0627\u0631 \u0647\u0648\u0634\u0645\u0646\u062f \u062a\u0627\u0631\u0627\u0632 \u0647\u0633\u062a\u0645. \u062f\u0631\u0628\u0627\u0631\u0647 \u062e\u062f\u0645\u0627\u062a\u060c \u0642\u06cc\u0645\u062a \u06cc\u0627 \u062f\u0645\u0648 \u0628\u067e\u0631\u0633\u06cc\u062f \u2014 \u06cc\u0627 \u0641\u0642\u0637 \u0633\u0644\u0627\u0645 \u06a9\u0646\u06cc\u062f. \u0627\u06af\u0631 \u0646\u06cc\u0627\u0632 \u0628\u0647 \u06af\u0641\u062a\u200c\u06af\u0648 \u0628\u0627 \u06a9\u0627\u0631\u0634\u0646\u0627\u0633 \u062f\u0627\u0634\u062a\u06cc\u062f\u060c \u0627\u06cc\u0646\u062c\u0627 \u0647\u0633\u062a\u06cc\u0645.',
+      greeting: '\u0633\u0644\u0627\u0645! \u0645\u0646 \u062f\u0633\u062a\u06cc\u0627\u0631 \u0647\u0648\u0634\u0645\u0646\u062f \u062a\u0627\u0631\u0627\u0632 \u0647\u0633\u062a\u0645. \u0628\u06af\u0648\u06cc\u06cc\u062f \u0686\u0647 \u0645\u0634\u06a9\u0644 \u06cc\u0627 \u0646\u06cc\u0627\u0632\u06cc \u062f\u0627\u0631\u06cc\u062f \u2014 \u0648 \u06cc\u0627 \u062f\u0631\u0628\u0627\u0631\u0647 \u062e\u062f\u0645\u0627\u062a\u060c \u0642\u06cc\u0645\u062a \u06cc\u0627 \u062f\u0645\u0648 \u0628\u067e\u0631\u0633\u06cc\u062f. \u0627\u06af\u0631 \u0646\u06cc\u0627\u0632 \u0628\u0647 \u06af\u0641\u062a\u200c\u06af\u0648 \u0628\u0627 \u06a9\u0627\u0631\u0634\u0646\u0627\u0633 \u062f\u0627\u0634\u062a\u06cc\u062f\u060c \u0627\u06cc\u0646\u062c\u0627 \u0647\u0633\u062a\u06cc\u0645.',
       chips: ['\u0642\u06cc\u0645\u062a \u0648 \u0647\u0632\u06cc\u0646\u0647', '\u062e\u062f\u0645\u0627\u062a', '\u0631\u0632\u0631\u0648 \u062f\u0645\u0648', '\u06af\u0641\u062a\u200c\u06af\u0648 \u0628\u0627 \u06a9\u0627\u0631\u0634\u0646\u0627\u0633'],
       replies: {
         greet: '\u0633\u0644\u0627\u0645! \u0645\u0645\u0646\u0648\u0646 \u06a9\u0647 \u067e\u06cc\u0627\u0645 \u062f\u0627\u062f\u06cc\u062f. \u0686\u06cc\u06a9 \u0645\u06cc\u200c\u062a\u0648\u0627\u0646\u06cc\u0645 \u06a9\u0645\u06a9 \u06a9\u0646\u06cc\u0645\u061f \u062f\u0631\u0628\u0627\u0631\u0647 \u0642\u06cc\u0645\u062a\u060c \u062e\u062f\u0645\u0627\u062a \u06cc\u0627 \u0631\u0632\u0631\u0648 \u062f\u0645\u0648\u06cc \u06a9\u0648\u062a\u0627\u0647 \u0628\u067e\u0631\u0633\u06cc\u062f.',
@@ -138,6 +139,30 @@
     return r || I18N[lang()].replies.fallback;
   }
 
+  function aiReply(msgs, done) {
+    fetch(API_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: msgs, locale: lang() }),
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          return { ok: res.ok, data: data };
+        });
+      })
+      .then(function (r) {
+        var text = r.data && r.data.replyText;
+        if (r.ok && typeof text === 'string' && text.trim()) {
+          done(text.trim());
+        } else {
+          done(null);
+        }
+      })
+      .catch(function () {
+        done(null);
+      });
+  }
+
   function send(text) {
     var msg = text.trim();
     if (!msg) return;
@@ -145,14 +170,21 @@
     addMsg('user', msg);
     save();
     var typing = showTyping();
-    var delay = 900 + Math.random() * 700;
-    setTimeout(function () {
-      typing.remove();
-      var key = replyTo(msg);
-      history.push({ role: 'bot', text: botReply(key), ts: Date.now() });
-      addMsg('bot', botReply(key));
-      save();
-    }, delay);
+    var started = Date.now();
+    var msgs = [];
+    history.slice(-20).forEach(function (m) {
+      msgs.push({ role: m.role === 'bot' ? 'assistant' : 'user', content: m.text });
+    });
+    aiReply(msgs, function (reply) {
+      var wait = Math.max(0, 700 - (Date.now() - started));
+      setTimeout(function () {
+        typing.remove();
+        var text = reply || botReply(replyTo(msg));
+        history.push({ role: 'bot', text: text, ts: Date.now() });
+        addMsg('bot', text);
+        save();
+      }, wait);
+    });
   }
 
   function renderChips() {
